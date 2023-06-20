@@ -4,7 +4,8 @@ import "dotenv/config";
 import path from "path";
 
 import viewsRouter from "./routes/views.js";
-import userRouter from "./routes/user.js"
+import userRouter from "./routes/user.js";
+import postsRouter from "./routes/posts.js";
 
 const PORT = 8080;
 const mongoUri = process.env.MONGODB_URI || "";
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use("/", viewsRouter);
 app.use("/api/user", userRouter);
+app.use("/api/posts", postsRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}...`);
