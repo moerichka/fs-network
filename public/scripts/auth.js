@@ -1,6 +1,6 @@
 const endpoint = "http://localhost:8080/api";
 
-let user = null;
+let user = JSON.parse(localStorage.getItem("user") || "null");
 
 const auth = async () => {
   try {
@@ -19,20 +19,25 @@ const auth = async () => {
       throw new Error("server error");
     }
 
-    const data = await response.json()
+    const data = await response.json();
 
-    user = data
+    user = data;
 
-    localStorage.setItem("user", JSON.stringify(user))
+    localStorage.setItem("user", JSON.stringify(user));
 
-    const event = new CustomEvent("userChanged", { detail: data })
-    window.dispatchEvent(event)
-
+    const event = new CustomEvent("userChanged", { detail: data });
+    window.dispatchEvent(event);
   } catch (error) {
     console.log("error: ", error);
   }
 };
 
-const logOut = () => {};
+const logOut = () => {
+  user = null;
+  localStorage.removeItem("user");
+
+  const event = new CustomEvent("userChanged", { detail: user });
+  window.dispatchEvent(event);
+};
 
 export { user, auth, logOut };
