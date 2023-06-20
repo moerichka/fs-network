@@ -1,10 +1,14 @@
 import express from "express";
 import mongoose from "mongoose";
+import "dotenv/config";
 import path from "path";
 
+import viewsRouter from "./routes/views.js";
+import userRouter from "./routes/user.js";
+import postsRouter from "./routes/posts.js";
+
 const PORT = 8080;
-const mongoUri =
-  "mongodb+srv://Michail:anime12345@cluster0.hy40t.mongodb.net/NewsApp?retryWrites=true&w=majority";
+const mongoUri = process.env.MONGODB_URI || "";
 
 const app = express();
 
@@ -20,6 +24,9 @@ app.use(express.static(path.resolve("public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use("/", viewsRouter);
+app.use("/api/user", userRouter);
+app.use("/api/posts", postsRouter)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}...`);
