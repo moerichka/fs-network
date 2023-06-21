@@ -5,8 +5,18 @@ const router = Router();
 
 // реализовать метод получения всех постов GET /
 
+// api/posts?page=1&limit=9
+
 router.get("/", async (req, res) => {
-  const posts = await Post.find().populate("authorId");
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 3;
+
+  const offset = (page - 1) * limit;
+
+  const posts = await Post.find()
+    .limit(limit)
+    .skip(offset)
+    .populate("authorId");
 
   res.status(200).json(posts);
 });
